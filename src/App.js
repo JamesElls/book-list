@@ -1,23 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+//I am still trying to understand everything haha
+
+import { useState, useEffect } from 'react'
+
+import Header from './components/Header'
+import Books from './components/Books'
+import axios from 'axios'
+
 
 function App() {
+  const [books, setBooks] = useState([])
+  const [loading, setLoading]= useState(true)
+
+    useEffect(() => {
+      loadData()
+    }, [])
+    
+    const loadData = async () => {
+      try{
+        console.log('getting data')
+        let res = await axios.get('https://fakerapi.it/api/v1/books?_quantity=5')
+        setBooks(res.data.data)
+        console.log('data loaded')
+        setLoading(false)
+      }catch(err){
+        console.log(err)
+        alert('error')
+        setLoading(false)
+      }
+      }
+  
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Books books = {books}/>
     </div>
   );
 }
